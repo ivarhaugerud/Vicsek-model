@@ -24,7 +24,7 @@ int main(int argc, char const *argv[])
     double density = atof(argv[5]);
     double delta_t = atof(argv[6]);
     int amount_of_data = atoi(argv[7]);
-    int nr_steps = pow(10, atof(argv[8]));
+    int nr_steps = atoi(argv[8]);
 
     cout << nr_steps << endl;
     string boundary_condition = "periodic";

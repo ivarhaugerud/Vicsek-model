@@ -61,13 +61,15 @@ MainClass::MainClass()
       for (int i = 0; i < N; i++)
         {
         if (i != j)
-          if ( sqrt((state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
+          {
+          if ( sqrt( (state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
           {
             sin_sum += sin(state(i,2));
             cos_sum += cos(state(i,2));
           }
+          }
         }
-        state(j, 2) += atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
+        state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
         state(j, 3) = v0*cos( state(j,2) );
         state(j, 4) = v0*sin( state(j,2) );
     }
