@@ -67,7 +67,7 @@ MainClass::MainClass()
             cos_sum += cos(state(i,2));
           }
         }
-        state(j, 2) += atan2(sin_sum, cos_sum); //angle_sum - twopi * floor( angle_sum / twopi );
+        state(j, 2) += atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
         state(j, 3) = v0*cos( state(j,2) );
         state(j, 4) = v0*sin( state(j,2) );
     }
