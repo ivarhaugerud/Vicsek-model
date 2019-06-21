@@ -23,7 +23,7 @@ def update_quiver(num):
     Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', units='inches')
 
     return Q
-    
+
 def get_data(filename, variables):
     df = pd.read_csv(filename,\
                     delim_whitespace=True, \
@@ -34,13 +34,13 @@ def get_data(filename, variables):
 
 
 
+number_of_files = 1000
 
 fig, ax = plt.subplots(1,1)
-
 state = get_data("data/test0.txt", ["x", "y", "angle", "vx", "vy"])
 Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', units='inches')
 
 
-anim = animation.FuncAnimation(fig, update_quiver, frames=np.linspace(0, 999, 1000, dtype="int"),
+anim = animation.FuncAnimation(fig, update_quiver, frames=np.linspace(0, number_of_files-1, number_of_files, dtype="int"),
                                interval=100, blit=False, repeat=False)
 plt.show()
