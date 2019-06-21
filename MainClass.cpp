@@ -52,21 +52,18 @@ MainClass::MainClass()
       state(j,0) += v0*dt*state(j,3);
       state(j,1) += v0*dt*state(j,4);
       }
-    BCs();
 
+    BCs();
     for (int j = 0; j < N; j++)
     {
       sin_sum = 0;
       cos_sum = 0;
       for (int i = 0; i < N; i++)
         {
-        if (i != j)
-          {
           if ( sqrt( (state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
           {
             sin_sum += sin(state(i,2));
             cos_sum += cos(state(i,2));
-          }
           }
         }
         state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
@@ -87,6 +84,23 @@ MainClass::MainClass()
           { state(j,1) -=  L*sign(state(j,1));}
         }
     }
+
+
+    if (BC == "hard")
+    {
+      for (int j = 0; j < N; j++)
+        {
+          if ( abs(state(j,0)) > L_half)
+          { state(j,0) -=  dt*state(j,3);
+            state(j,2) += twopi/2;
+          }
+
+          if ( abs(state(j,1)) > L_half)
+          { state(j,1) -= dt*state(j,4);
+            state(j,2) += twopi/2;
+          }
+        }
+    }
   }
 
   void MainClass::run()
@@ -95,10 +109,10 @@ MainClass::MainClass()
     int counter = 0;
 
     cout << "BEGINING RUN:\n" << endl;
-    cout << "L: " << L << endl;
-    cout << "R: " << R << endl;
+    cout << "L:   " << L << endl;
+    cout << "R:   " << R << endl;
     cout << "rho: " << rho << endl;
-    cout << "v0: " << v0 << endl;
+    cout << "v0:  " << v0 << endl;
     cout << "eta: " << eta<< endl;
 
     for (int t = 0; t < steps; t++)
