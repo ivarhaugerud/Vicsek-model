@@ -122,7 +122,7 @@ MainClass::MainClass()
         ofstream outfile("data/" +  filename + to_string(counter) + ".txt");
         if (!outfile.is_open())
           cout<<"Could not open file" << endl;
-        write(outfile);
+        write_state(outfile);
         counter += 1;
       }
 
@@ -130,15 +130,55 @@ MainClass::MainClass()
     }
   }
 
+  void MainClass::equiliebrate()
+  {for (int t = 0; t < steps; t++)
+    {step();}}
+
   int MainClass::sign(double x)
   {
     return (x > 0) - (x < 0);
   }
 
-  void MainClass::write(ofstream& OutputFile)
+  void MainClass::write_state(ofstream& OutputFile)
   {
     for (int j = 0; j < N; j++)
     {
       OutputFile << state(j, 0) << " " << state(j, 1)  << " " << state(j, 2)  << " " << state(j, 3)  << " " << state(j, 4) << "\n";
     }
+  }
+
+double MainClass::calc_order()
+  {
+    double total_velocity_x = 0;
+    double total_velocity_y = 0;
+    for (int j=0; j < N; j++)
+    {
+      total_velocity_x += state(j, 3);
+      total_velocity_y += state(j, 4);
+    }
+    return sqrt(total_velocity_x*total_velocity_x + total_velocity_y*total_velocity_y)/(N*v0);
+  }
+
+  void MainClass::write_order()
+  {
+    ofstream outfile("data/" +  filename + ".txt", std::ios_base::app);
+    if (!outfile.is_open())
+      cout<<"Could not open file" << endl;
+    outfile << L << " " << R << " " << rho << " " << v0 << " " << eta << " " << calc_order() << "\n";
+  }
+
+  void MainClass::change_eta(double new_eta)
+  {
+    eta = new_eta;
+  }
+
+  void MainClass::change_radius(double new_radius)
+  {
+    R = new_radius;
+  }
+
+  void MainClass::change_density(double new_density)
+  {
+    rho = new_density;
+    L = sqrt(N/rho);
   }

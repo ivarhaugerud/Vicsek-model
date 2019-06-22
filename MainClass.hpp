@@ -52,7 +52,13 @@ public:
   void run();
   void BCs();
   int sign(double x);
-  void write(ofstream& OutputFile);
+  void write_state(ofstream& OutputFile);
+  double calc_order();
+  void write_order();
+  void equiliebrate();
+  void change_eta(double new_eta);
+  void change_radius(double new_radius);
+  void change_density(double new_density);
 };
 
 #endif
