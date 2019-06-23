@@ -16,6 +16,7 @@ MainClass::MainClass()
     L_half = L/2;
     steps = nr_steps;
     dt = delta_t;
+    average_order = 0;
 
     //define arrays and vectors
     state = Mat<double>(N+1, 5); // 5 = x & y -pos,angle,x-y velocity
@@ -106,14 +107,23 @@ MainClass::MainClass()
   void MainClass::run()
   {
     int denominator = steps/data_lines;
-    int counter = 0;
+    double average_order = 0;
 
-    cout << "BEGINING RUN:\n" << endl;
-    cout << "L:   " << L << endl;
-    cout << "R:   " << R << endl;
-    cout << "rho: " << rho << endl;
-    cout << "v0:  " << v0 << endl;
-    cout << "eta: " << eta<< endl;
+    for (int t = 0; t < steps; t++)
+    {
+      if (t % denominator == 0)
+      {
+        average_order += calc_order();
+      }
+      step();
+    }
+    write_something(average_order/data_lines);
+  }
+
+  void MainClass::run_with_positions()
+  {
+    int denominator = steps/data_lines;
+    int counter = 0;
 
     for (int t = 0; t < steps; t++)
     {
@@ -125,13 +135,12 @@ MainClass::MainClass()
         write_state(outfile);
         counter += 1;
       }
-
       step();
     }
   }
 
-  void MainClass::equiliebrate()
-  {for (int t = 0; t < steps; t++)
+  void MainClass::equiliebrate(int equiliebrate_steps)
+  {for (int t = 0; t < equiliebrate_steps; t++)
     {step();}}
 
   int MainClass::sign(double x)
@@ -159,12 +168,12 @@ double MainClass::calc_order()
     return sqrt(total_velocity_x*total_velocity_x + total_velocity_y*total_velocity_y)/(N*v0);
   }
 
-  void MainClass::write_order()
+  void MainClass::write_something(double something)
   {
     ofstream outfile("data/" +  filename + ".txt", std::ios_base::app);
     if (!outfile.is_open())
       cout<<"Could not open file" << endl;
-    outfile << L << " " << R << " " << rho << " " << v0 << " " << eta << " " << calc_order() << "\n";
+    outfile << L << " " << R << " " << rho << " " << v0 << " " << eta << " " << something << "\n";
   }
 
   void MainClass::change_eta(double new_eta)

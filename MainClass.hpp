@@ -24,6 +24,7 @@ public:
   double L_half;
   int steps;
   double dt;
+  double average_order;
 
   double sin_sum;
   double cos_sum;
@@ -50,12 +51,13 @@ public:
   void initialize_random();
   void step();
   void run();
+  void run_with_positions();
   void BCs();
   int sign(double x);
   void write_state(ofstream& OutputFile);
   double calc_order();
-  void write_order();
-  void equiliebrate();
+  void write_something(double something);
+  void equiliebrate(int equiliebrate_steps);
   void change_eta(double new_eta);
   void change_radius(double new_radius);
   void change_density(double new_density);
