@@ -38,6 +38,7 @@ int main(int argc, char const *argv[])
     {
       vicsek.change_eta(changing);
       vicsek.initialize_random();
+      vicsek.initialize_gaussian_velocity();
       vicsek.equiliebrate(5000);
       vicsek.run();
     }

@@ -26,15 +26,14 @@ int main(int argc, char const *argv[])
     int amount_of_data = atoi(argv[7]);
     int nr_steps = atoi(argv[8]);
 
-    cout << nr_steps << endl;
     string boundary_condition = "periodic";
-    string save_name  = "gaussian_velocity";
+    string save_name  = "gaussian_velocity_1.5_";
 
     MainClass vicsek(number, velocity, radius, noise, density, delta_t,
                      boundary_condition, nr_steps, save_name, amount_of_data);
 
     vicsek.initialize_random();
-    vicsek.initialize_gaussian_velocity(velocity, 1);
+    vicsek.initialize_gaussian_velocity(velocity, 0.75);
     vicsek.run_with_positions();
 
     return 0;

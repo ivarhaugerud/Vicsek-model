@@ -19,7 +19,7 @@ def update_quiver(num):
     global Q
     Q.remove()
 
-    state = get_data("data/gaussian_velocity" +str(num) + ".txt", ["x", "y", "angle", "vx", "vy"])
+    state = get_data("data/gaussian_velocity" +str(num) + ".txt", ["x", "y", "angle", "vx", "vy", "v"])
     Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', units='inches')
 
     return Q
@@ -37,7 +37,7 @@ def get_data(filename, variables):
 number_of_files = 1000
 
 fig, ax = plt.subplots(1,1)
-state = get_data("data/gaussian_velocity0.txt", ["x", "y", "angle", "vx", "vy"])
+state = get_data("data/gaussian_velocity0.txt", ["x", "y", "angle", "vx", "vy", "v"])
 Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', units='inches')
 
 

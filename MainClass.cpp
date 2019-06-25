@@ -174,7 +174,7 @@ MainClass::MainClass()
   {
     for (int j = 0; j < N; j++)
     {
-      OutputFile << state(j, 0) << " " << state(j, 1)  << " " << state(j, 2)  << " " << state(j, 3)  << " " << state(j, 4) << "\n";
+      OutputFile << state(j, 0) << " " << state(j, 1)  << " " << state(j, 2)  << " " << state(j, 3)  << " " << state(j, 4) << " " << state(j,5) << "\n";
     }
   }
 
