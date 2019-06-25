@@ -28,12 +28,13 @@ int main(int argc, char const *argv[])
 
     cout << nr_steps << endl;
     string boundary_condition = "periodic";
-    string save_name  = "new_test";
+    string save_name  = "gaussian_velocity";
 
     MainClass vicsek(number, velocity, radius, noise, density, delta_t,
                      boundary_condition, nr_steps, save_name, amount_of_data);
 
     vicsek.initialize_random();
+    vicsek.initialize_gaussian_velocity(velocity, 1);
     vicsek.run_with_positions();
 
     return 0;

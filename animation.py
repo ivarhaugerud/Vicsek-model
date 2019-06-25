@@ -19,7 +19,7 @@ def update_quiver(num):
     global Q
     Q.remove()
 
-    state = get_data("data/new_test" +str(num) + ".txt", ["x", "y", "angle", "vx", "vy"])
+    state = get_data("data/gaussian_velocity" +str(num) + ".txt", ["x", "y", "angle", "vx", "vy"])
     Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', units='inches')
 
     return Q
@@ -34,14 +34,14 @@ def get_data(filename, variables):
 
 
 
-number_of_files = 500
+number_of_files = 1000
 
 fig, ax = plt.subplots(1,1)
-state = get_data("data/new_test0.txt", ["x", "y", "angle", "vx", "vy"])
+state = get_data("data/gaussian_velocity0.txt", ["x", "y", "angle", "vx", "vy"])
 Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', units='inches')
 
 
 anim = animation.FuncAnimation(fig, update_quiver, frames=np.linspace(0, number_of_files-1, number_of_files, dtype="int"),
-                               interval=500, blit=False, repeat=False)
-anim.save('animation.gif', dpi=130, writer='imagemagick')
+                               interval=10, blit=False, repeat=False)
+#anim.save('animation.gif', dpi=130, writer='imagemagick')
 plt.show()

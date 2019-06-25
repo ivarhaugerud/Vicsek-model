@@ -19,7 +19,7 @@ MainClass::MainClass()
     average_order = 0;
 
     //define arrays and vectors
-    state = Mat<double>(N+1, 5); // 5 = x & y -pos,angle,x-y velocity
+    state = Mat<double>(N+1, 6); // 5 = x & y -pos,angle,x-y velocity, velocity
 
     //for saving data
     filename = save_name;
@@ -42,6 +42,20 @@ MainClass::MainClass()
         state(j, 2) = zero_to_one_distribution(generator)*twopi;
         state(j, 3) = v0*cos( state(j,2) );
         state(j, 4) = v0*sin( state(j,2) );
+        state(j, 5) = v0;
+      }
+  }
+
+  void MainClass::initialize_gaussian_velocity(double mu, double sigma)
+  {
+    double vel = 0;
+    std::normal_distribution<double> normal_distribution(mu, sigma);
+    for (int j = 0; j < N; j++)
+      {
+        vel = normal_distribution(generator);
+        state(j, 3) = vel*cos( state(j,2) );
+        state(j, 4) = vel*sin( state(j,2) );
+        state(j, 5) = vel;
       }
   }
 
@@ -50,8 +64,8 @@ MainClass::MainClass()
     for (int j = 0; j < N; j++)
       {
       //update position
-      state(j,0) += v0*dt*state(j,3);
-      state(j,1) += v0*dt*state(j,4);
+      state(j,0) += state(j,5)*dt*state(j,3);
+      state(j,1) += state(j,5)*dt*state(j,4);
       }
 
     BCs();
@@ -59,17 +73,25 @@ MainClass::MainClass()
     {
       sin_sum = 0;
       cos_sum = 0;
+      vel_sum = 0;
+      nr_neighbours = 0;
+
       for (int i = 0; i < N; i++)
         {
           if ( sqrt( (state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
           {
             sin_sum += sin(state(i,2));
             cos_sum += cos(state(i,2));
+            vel_sum += sqrt(state(i,3)*state(i,3) + state(i,4)*state(i,4));
+            nr_neighbours += 1;
           }
         }
+        vel_sum = vel_sum/nr_neighbours;
+
         state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
-        state(j, 3) = v0*cos( state(j,2) );
-        state(j, 4) = v0*sin( state(j,2) );
+        state(j, 3) = vel_sum*cos( state(j,2) );
+        state(j, 4) = vel_sum*sin( state(j,2) );
+        state(j, 5) = vel_sum;
     }
   }
 
