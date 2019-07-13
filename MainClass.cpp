@@ -59,7 +59,7 @@ MainClass::MainClass()
       }
   }
 
-  void MainClass::step()
+  void MainClass::step_with_vel_dist()
   {
     for (int j = 0; j < N; j++)
       {
@@ -92,6 +92,37 @@ MainClass::MainClass()
         state(j, 3) = vel_sum*cos( state(j,2) );
         state(j, 4) = vel_sum*sin( state(j,2) );
         state(j, 5) = vel_sum;
+    }
+  }
+
+
+  void MainClass::step()
+  {
+    for (int j = 0; j < N; j++)
+      {
+      //update position
+      state(j,0) += state(j,5)*dt*state(j,3);
+      state(j,1) += state(j,5)*dt*state(j,4);
+      }
+
+    BCs();
+    for (int j = 0; j < N; j++)
+    {
+      sin_sum = 0;
+      cos_sum = 0;
+      
+      for (int i = 0; i < N; i++)
+        {
+          if ( sqrt( (state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
+          {
+            sin_sum += sin(state(i,2));
+            cos_sum += cos(state(i,2));
+          }
+        }
+
+        state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
+        state(j, 3) = v0*cos( state(j,2) );
+        state(j, 4) = v0*sin( state(j,2) );
     }
   }
 

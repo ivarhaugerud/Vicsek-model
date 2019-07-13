@@ -21,7 +21,7 @@ def get_data(filename, variables):
     return df
     #using pandas to read the data files
 
-"""
+
 data_100 = get_data("data/new_run_100.txt", ["L", "R", "rho", "v0", "eta", "order"])
 data_50 = get_data("data/new_run_50.txt", ["L", "R", "rho", "v0", "eta", "order"])
 data_30 = get_data("data/new_run_30.txt", ["L", "R", "rho", "v0", "eta", "order"])
@@ -34,9 +34,12 @@ plt.plot(data_30["eta"], data_30["order"], "o", label=r"$\rho = 30$")
 plt.plot(data_10["eta"], data_10["order"], "o", label=r"$\rho = 10$")
 plt.plot(data_1["eta"], data_1["order"], "o", label=r"$\rho = 1$")
 
-plt.legend(loc="best")
+plt.legend(loc="best", fontsize=14)
+plt.xlabel("Random noise $\eta$ [radians]", fontsize=14)
+plt.ylabel("Order parameter", fontsize=14)
+plt.savefig("order_parameter.png")
 plt.show()
-"""
+
 nr_data = 100
 average_velocity = np.zeros(nr_data)
 std_velocity = np.zeros(nr_data)

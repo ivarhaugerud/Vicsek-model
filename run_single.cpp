@@ -27,13 +27,13 @@ int main(int argc, char const *argv[])
     int nr_steps = atoi(argv[8]);
 
     string boundary_condition = "periodic";
-    string save_name  = "gaussian_velocity_1.5_";
+    string save_name  = "test_test_test";
 
     MainClass vicsek(number, velocity, radius, noise, density, delta_t,
                      boundary_condition, nr_steps, save_name, amount_of_data);
 
     vicsek.initialize_random();
-    vicsek.initialize_gaussian_velocity(velocity, 0.75);
+    //vicsek.initialize_gaussian_velocity(velocity, 0.75);
     vicsek.run_with_positions();
 
     return 0;
