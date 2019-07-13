@@ -43,5 +43,5 @@ Q = ax.quiver(state["x"], state["y"], state["vx"], state["vy"], pivot='mid', uni
 
 anim = animation.FuncAnimation(fig, update_quiver, frames=np.linspace(0, number_of_files-1, number_of_files, dtype="int"),
                                interval=10, blit=False, repeat=False)
-anim.save('animation.gif', dpi=150, writer='imagemagick')
+anim.save('animation_2.gif', dpi=150, writer='imagemagick')
 plt.show()
