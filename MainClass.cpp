@@ -29,7 +29,7 @@ MainClass::MainClass()
     BC = boundary_condition;
 
     //random number generator
-    std::mt19937 generator (std::clock()); //initialize seed with clock
+    std::mt19937 generator (1); //initialize seed with clock
     std::uniform_real_distribution<double> zero_to_one_distribution(0.0, 1.0);
   }
 
@@ -104,8 +104,8 @@ MainClass::MainClass()
       state(j,0) += state(j,5)*dt*state(j,3);
       state(j,1) += state(j,5)*dt*state(j,4);
       }
-
-    BCs();
+    BCs(); 
+    
     for (int j = 0; j < N; j++)
     {
       sin_sum = 0;
@@ -144,14 +144,28 @@ MainClass::MainClass()
     {
       for (int j = 0; j < N; j++)
         {
-          if ( abs(state(j,0)) > L_half)
-          { state(j,0) -=  dt*state(j,3);
-            state(j,2) += twopi/2;
+          if (state(j,0) > L_half)
+          { state(j,0)  =  L_half - L_half/10;
+            state(j,2) -= twopi/2;
+            state(j, 3) *= (-1);
           }
 
-          if ( abs(state(j,1)) > L_half)
-          { state(j,1) -= dt*state(j,4);
-            state(j,2) += twopi/2;
+          if (state(j,0) < -L_half)
+          { state(j,0)  =  -L_half + L_half/10;
+            state(j,2) -= twopi/2;
+            state(j, 3) *= (-1);
+          }
+
+          if ( state(j,1) > L_half)
+          { state(j,1)  = L_half - L_half/10;
+            state(j,2) -= twopi/2;
+            state(j, 4) *= (-1);
+          }
+
+          if ( state(j,1) < -L_half)
+          { state(j,1)  = -L_half + L_half/10;
+            state(j,2) -= twopi/2;
+            state(j, 4) *= (-1);
           }
         }
     }
