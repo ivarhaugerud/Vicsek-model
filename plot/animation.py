@@ -34,7 +34,7 @@ def get_data(filename, variables):
 
 
 
-number_of_files = 100
+number_of_files = 2000
 
 fig, ax = plt.subplots(1,1)
 state = get_data("../data/today0.txt", ["x", "y", "angle", "vx", "vy", "v"])
