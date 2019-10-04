@@ -108,25 +108,25 @@ MainClass::MainClass()
     if (BC == "hard")
     {
       if (state(j,0) > L_half)
-      { state(j,0)  =  L_half - L_half/100;
+      { state(j,0)  =  L_half - state(j,5)*dt;
         state(j, 3) *= (-1);
         state(j, 2) = atan2(state(j,4), state(j,3));
       }
 
       else if (state(j,0) < -L_half)
-      { state(j,0)  =  -L_half + L_half/100;
+      { state(j,0)  =  -L_half + state(j,5)*dt;
         state(j, 3) *= (-1);
         state(j, 2) = atan2(state(j,4), state(j,3));
       }
 
       else if ( state(j,1) > L_half)
-      { state(j,1)  = L_half - L_half/100;
+      { state(j,1)  = L_half - state(j,5)*dt;
         state(j, 4) *= (-1);
         state(j, 2) = atan2(state(j,4), state(j,3));
       }
 
       else if ( state(j,1) < -L_half)
-      { state(j,1)  = -L_half + L_half/100;
+      { state(j,1)  = -L_half + state(j,5)*dt;
         state(j, 4) *= (-1);
         state(j, 2) = atan2(state(j,4), state(j,3));
       }
@@ -158,7 +158,7 @@ MainClass::MainClass()
     {
       if (t % denominator == 0)
       {
-        ofstream outfile("data/" +  filename + to_string(counter) + ".txt");
+        ofstream outfile("../data/" +  filename + to_string(counter) + ".txt");
         if (!outfile.is_open())
           cout<<"Could not open file" << endl;
         write_state(outfile);
@@ -199,7 +199,7 @@ double MainClass::calc_order()
 
   void MainClass::write_something(double something)
   {
-    ofstream outfile("data/" +  filename + ".txt", std::ios_base::app);
+    ofstream outfile("../data/" +  filename + ".txt", std::ios_base::app);
     if (!outfile.is_open())
       cout<<"Could not open file" << endl;
     outfile << L << " " << R << " " << rho << " " << v0 << " " << eta << " " << something << "\n";
