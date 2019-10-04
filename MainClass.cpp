@@ -59,43 +59,6 @@ MainClass::MainClass()
       }
   }
 
-  void MainClass::step_with_vel_dist()
-  {
-    for (int j = 0; j < N; j++)
-      {
-      //update position
-      state(j,0) += state(j,5)*dt*state(j,3);
-      state(j,1) += state(j,5)*dt*state(j,4);
-      }
-
-    BCs();
-    for (int j = 0; j < N; j++)
-    {
-      sin_sum = 0;
-      cos_sum = 0;
-      vel_sum = 0;
-      nr_neighbours = 0;
-
-      for (int i = 0; i < N; i++)
-        {
-          if ( sqrt( (state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
-          {
-            sin_sum += sin(state(i,2));
-            cos_sum += cos(state(i,2));
-            vel_sum += sqrt(state(i,3)*state(i,3) + state(i,4)*state(i,4));
-            nr_neighbours += 1;
-          }
-        }
-        vel_sum = vel_sum/nr_neighbours;
-
-        state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
-        state(j, 3) = vel_sum*cos( state(j,2) );
-        state(j, 4) = vel_sum*sin( state(j,2) );
-        state(j, 5) = vel_sum;
-    }
-  }
-
-
   void MainClass::step()
   {
     for (int j = 0; j < N; j++)
@@ -104,13 +67,18 @@ MainClass::MainClass()
       state(j,0) += state(j,5)*dt*state(j,3);
       state(j,1) += state(j,5)*dt*state(j,4);
       }
-    BCs(); 
-    
+    //BCs(); 
+
     for (int j = 0; j < N; j++)
     {
-      sin_sum = 0;
-      cos_sum = 0;
-      
+      if (abs(state(j,0)) > L_half or abs(state(j,1)) > L_half)
+      {BCs(j);}
+
+      else 
+      {
+        sin_sum = 0;
+        cos_sum = 0;
+    
       for (int i = 0; i < N; i++)
         {
           if ( sqrt( (state(j,0)-state(i,0))*(state(j,0)-state(i,0)) + (state(j,1)-state(i,1))*(state(j,1)-state(i,1)) ) < R)
@@ -119,55 +87,49 @@ MainClass::MainClass()
             cos_sum += cos(state(i,2));
           }
         }
-
-        state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
-        state(j, 3) = v0*cos( state(j,2) );
-        state(j, 4) = v0*sin( state(j,2) );
+      state(j, 2) = atan2(sin_sum, cos_sum) + (zero_to_one_distribution(generator)-0.5)*eta;
+      state(j, 3) = v0*cos( state(j,2) );
+      state(j, 4) = v0*sin( state(j,2) );
+       }
     }
   }
 
-  void MainClass::BCs()
+  void MainClass::BCs(int j)
   {
     if (BC == "periodic")
     {
-      for (int j = 0; j < N; j++)
-        {
-          if ( abs(state(j,0)) > L_half)
-          { state(j,0) -=  L*sign(state(j,0));}
-          if ( abs(state(j,1)) > L_half)
-          { state(j,1) -=  L*sign(state(j,1));}
-        }
+      if ( abs(state(j,0)) > L_half)
+      { state(j,0) -=  L*sign(state(j,0));}
+      if ( abs(state(j,1)) > L_half)
+      { state(j,1) -=  L*sign(state(j,1));}
     }
 
 
     if (BC == "hard")
     {
-      for (int j = 0; j < N; j++)
-        {
-          if (state(j,0) > L_half)
-          { state(j,0)  =  L_half - L_half/10;
-            state(j,2) -= twopi/2;
-            state(j, 3) *= (-1);
-          }
+      if (state(j,0) > L_half)
+      { state(j,0)  =  L_half - L_half/100;
+        state(j, 3) *= (-1);
+        state(j, 2) = atan2(state(j,4), state(j,3));
+      }
 
-          if (state(j,0) < -L_half)
-          { state(j,0)  =  -L_half + L_half/10;
-            state(j,2) -= twopi/2;
-            state(j, 3) *= (-1);
-          }
+      else if (state(j,0) < -L_half)
+      { state(j,0)  =  -L_half + L_half/100;
+        state(j, 3) *= (-1);
+        state(j, 2) = atan2(state(j,4), state(j,3));
+      }
 
-          if ( state(j,1) > L_half)
-          { state(j,1)  = L_half - L_half/10;
-            state(j,2) -= twopi/2;
-            state(j, 4) *= (-1);
-          }
+      else if ( state(j,1) > L_half)
+      { state(j,1)  = L_half - L_half/100;
+        state(j, 4) *= (-1);
+        state(j, 2) = atan2(state(j,4), state(j,3));
+      }
 
-          if ( state(j,1) < -L_half)
-          { state(j,1)  = -L_half + L_half/10;
-            state(j,2) -= twopi/2;
-            state(j, 4) *= (-1);
-          }
-        }
+      else if ( state(j,1) < -L_half)
+      { state(j,1)  = -L_half + L_half/100;
+        state(j, 4) *= (-1);
+        state(j, 2) = atan2(state(j,4), state(j,3));
+      }
     }
   }
 

@@ -25,8 +25,9 @@ int main(int argc, char const *argv[])
     double delta_t = atof(argv[6]);
     int amount_of_data = atoi(argv[7]);
     int nr_steps = atoi(argv[8]);
+    string boundary_condition = argv[9];
 
-    string boundary_condition = "hard";
+    //string boundary_condition = "hard";
     string save_name  = "today";
 
     MainClass vicsek(number, velocity, radius, noise, density, delta_t,

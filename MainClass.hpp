@@ -55,8 +55,7 @@ public:
   void initialize_gaussian_velocity(double mu, double sigma);
 
   void step();
-  void step_with_vel_dist();
-  void BCs();
+  void BCs(int j);
   void run();
   void run_with_positions();
   void equiliebrate(int equiliebrate_steps);
